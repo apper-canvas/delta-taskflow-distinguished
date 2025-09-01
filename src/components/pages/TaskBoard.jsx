@@ -43,38 +43,47 @@ const TaskBoard = () => {
   const filteredTasks = useMemo(() => {
     let filtered = [...tasks]
 
-    // Filter by category from URL
+// Filter by category from URL
     if (categoryName) {
-      filtered = filtered.filter(task => 
-        task.category.toLowerCase() === categoryName.toLowerCase()
-      )
+      filtered = filtered.filter(task => {
+        const taskCategory = task.category_c?.Name || task.category_c || task.category
+        return taskCategory && taskCategory.toLowerCase() === categoryName.toLowerCase()
+      })
     }
 
     // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(task =>
-        task.title.toLowerCase().includes(query) ||
-        task.description.toLowerCase().includes(query) ||
-        task.category.toLowerCase().includes(query)
-      )
+      filtered = filtered.filter(task => {
+        const title = task.title_c || task.title || ""
+        const description = task.description_c || task.description || ""
+        const category = task.category_c?.Name || task.category_c || task.category || ""
+        return title.toLowerCase().includes(query) ||
+               description.toLowerCase().includes(query) ||
+               category.toLowerCase().includes(query)
+      })
     }
 
     return filtered
   }, [tasks, categoryName, searchQuery])
 
-  const taskStats = useMemo(() => {
+const taskStats = useMemo(() => {
     const total = tasks.length
-    const completed = tasks.filter(t => t.completed).length
+    const completed = tasks.filter(t => t.completed_c || t.completed).length
     const today = tasks.filter(t => {
-      const taskDate = new Date(t.dueDate)
+      const dueDate = t.due_date_c || t.dueDate
+      if (!dueDate) return false
+      const taskDate = new Date(dueDate)
       const today = new Date()
       return taskDate.toDateString() === today.toDateString()
     }).length
     const upcoming = tasks.filter(t => {
-      const taskDate = new Date(t.dueDate)
+      const dueDate = t.due_date_c || t.dueDate
+      if (!dueDate) return false
+      const taskDate = new Date(dueDate)
       const today = new Date()
-      return taskDate > today && !t.completed
+      const isCompleted = t.completed_c || t.completed
+      return taskDate > today && !isCompleted
     }).length
 
     return { total, completed, today, upcoming }
@@ -93,12 +102,12 @@ const TaskBoard = () => {
     }
   }
 
-  const handleSaveTask = async (taskData) => {
+const handleSaveTask = async (taskData) => {
     try {
-if (editingTask) {
+      if (editingTask) {
         const updatedTask = await taskService.update(editingTask.Id, {
           ...taskData,
-          completed: taskData.status === "completed"
+          completed_c: taskData.status_c === "completed" || taskData.status === "completed"
         })
         setTasks(prevTasks =>
           prevTasks.map(task =>

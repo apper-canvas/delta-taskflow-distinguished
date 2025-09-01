@@ -14,34 +14,34 @@ const TaskModal = ({
   task = null,
   categories = []
 }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "Work",
-priority: "Medium",
-    status: "pending",
-    dueDate: ""
+const [formData, setFormData] = useState({
+    title_c: "",
+    description_c: "",
+    category_c: 1,
+    priority_c: "Medium",
+    status_c: "pending",
+    due_date_c: ""
   })
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    if (task) {
+if (task) {
       setFormData({
-        title: task.title || "",
-        description: task.description || "",
-        category: task.category || "Work",
-        priority: task.priority || "Medium",
-status: task.status || "pending",
-        dueDate: task.dueDate ? new Date(task.dueDate).toISOString().slice(0, 16) : ""
+        title_c: task.title_c || task.title || "",
+        description_c: task.description_c || task.description || "",
+        category_c: task.category_c?.Id || task.category_c || 1,
+        priority_c: task.priority_c || task.priority || "Medium",
+        status_c: task.status_c || task.status || "pending",
+        due_date_c: task.due_date_c || task.dueDate ? new Date(task.due_date_c || task.dueDate).toISOString().slice(0, 16) : ""
       })
     } else {
       setFormData({
-        title: "",
-        description: "",
-        category: "Work",
-priority: "Medium",
-        status: "pending",
-        dueDate: ""
+        title_c: "",
+        description_c: "",
+        category_c: 1,
+        priority_c: "Medium",
+        status_c: "pending",
+        due_date_c: ""
       })
     }
   }, [task, isOpen])
@@ -49,16 +49,16 @@ priority: "Medium",
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if (!formData.title.trim()) {
+if (!formData.title_c.trim()) {
       toast.error("Please enter a task title")
       return
     }
 
     setIsLoading(true)
     try {
-      const taskData = {
+const taskData = {
         ...formData,
-        dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null
+        due_date_c: formData.due_date_c ? new Date(formData.due_date_c).toISOString() : null
       }
       
       await onSave(taskData)
@@ -110,10 +110,10 @@ priority: "Medium",
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Title *
             </label>
-            <Input
+<Input
               type="text"
-              value={formData.title}
-              onChange={(e) => handleChange("title", e.target.value)}
+              value={formData.title_c}
+              onChange={(e) => handleChange("title_c", e.target.value)}
               placeholder="Enter task title"
               required
             />
@@ -123,9 +123,9 @@ priority: "Medium",
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Description
             </label>
-            <Textarea
-              value={formData.description}
-              onChange={(e) => handleChange("description", e.target.value)}
+<Textarea
+              value={formData.description_c}
+              onChange={(e) => handleChange("description_c", e.target.value)}
               placeholder="Enter task description (optional)"
               rows={3}
             />
@@ -136,13 +136,13 @@ priority: "Medium",
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Category
               </label>
-              <Select
-                value={formData.category}
-                onChange={(e) => handleChange("category", e.target.value)}
+<Select
+                value={formData.category_c}
+                onChange={(e) => handleChange("category_c", parseInt(e.target.value))}
               >
                 {categories.map(category => (
-                  <option key={category.Id} value={category.name}>
-                    {category.name}
+                  <option key={category.Id} value={category.Id}>
+                    {category.Name}
                   </option>
                 ))}
               </Select>
@@ -152,9 +152,9 @@ priority: "Medium",
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Priority
               </label>
-              <Select
-                value={formData.priority}
-                onChange={(e) => handleChange("priority", e.target.value)}
+<Select
+                value={formData.priority_c}
+                onChange={(e) => handleChange("priority_c", e.target.value)}
               >
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
@@ -166,12 +166,11 @@ priority: "Medium",
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Status
               </label>
-              <Select 
-                value={formData.status}
-                onChange={(e) => handleChange('status', e.target.value)}
+<Select 
+                value={formData.status_c}
+                onChange={(e) => handleChange("status_c", e.target.value)}
               >
                 <option value="pending">Pending</option>
-                <option value="in-progress">In Progress</option>
                 <option value="completed">Completed</option>
               </Select>
             </div>
@@ -181,10 +180,10 @@ priority: "Medium",
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Due Date
             </label>
-            <Input
+<Input
               type="datetime-local"
-              value={formData.dueDate}
-              onChange={(e) => handleChange("dueDate", e.target.value)}
+              value={formData.due_date_c}
+              onChange={(e) => handleChange("due_date_c", e.target.value)}
             />
           </div>
 

@@ -1,7 +1,9 @@
 import { motion } from "framer-motion"
+import { useContext } from "react"
 import ApperIcon from "@/components/ApperIcon"
 import Button from "@/components/atoms/Button"
 import SearchBar from "@/components/molecules/SearchBar"
+import { AuthContext } from "../../App"
 
 const Header = ({ 
   onAddTask, 
@@ -10,7 +12,7 @@ const Header = ({
   completedTasks = 0 
 }) => {
   const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
-
+  const { logout } = useContext(AuthContext)
   return (
     <motion.header
       initial={{ y: -20, opacity: 0 }}
@@ -26,15 +28,25 @@ TaskFlow Pro
             Stay organized, get things done
           </p>
         </div>
-        
-        <Button
-          variant="accent"
-          onClick={onAddTask}
-          className="flex items-center space-x-2"
-        >
-          <ApperIcon name="Plus" size={18} />
-          <span>Add Task</span>
-        </Button>
+<div className="flex items-center space-x-3">
+          <Button
+            variant="accent"
+            onClick={onAddTask}
+            className="flex items-center space-x-2"
+          >
+            <ApperIcon name="Plus" size={18} />
+            <span>Add Task</span>
+          </Button>
+          
+          <Button
+            variant="secondary"
+            onClick={logout}
+            className="flex items-center space-x-2"
+          >
+            <ApperIcon name="LogOut" size={16} />
+            <span>Logout</span>
+          </Button>
+        </div>
       </div>
 
       <div className="flex items-center justify-between">

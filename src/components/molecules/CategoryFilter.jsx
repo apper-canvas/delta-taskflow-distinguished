@@ -8,13 +8,13 @@ const CategoryFilter = ({
   onCategoryChange,
   className = "" 
 }) => {
-  const allCategory = { Id: "all", name: "All", color: "#6B7280", icon: "Grid3X3" }
+const allCategory = { Id: "all", Name: "All", color_c: "#6B7280", icon_c: "Grid3X3" }
   const filterCategories = [allCategory, ...categories]
 
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {filterCategories.map((category) => {
-        const isActive = selectedCategory === category.name || 
+const isActive = selectedCategory === category.Name || 
                          (selectedCategory === "" && category.Id === "all")
         
         return (
@@ -22,7 +22,7 @@ const CategoryFilter = ({
             key={category.Id}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onCategoryChange(category.Id === "all" ? "" : category.name)}
+onClick={() => onCategoryChange(category.Id === "all" ? "" : category.Name)}
             className={cn(
               "inline-flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
               isActive
@@ -30,13 +30,13 @@ const CategoryFilter = ({
                 : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 hover:border-gray-300"
             )}
           >
-            <ApperIcon 
-              name={category.icon} 
+<ApperIcon 
+              name={category.icon_c || category.icon} 
               size={14}
               className={isActive ? "text-white" : ""}
-              style={!isActive ? { color: category.color } : {}}
+              style={!isActive ? { color: category.color_c || category.color } : {}}
             />
-            <span>{category.name}</span>
+            <span>{category.Name || category.name}</span>
           </motion.button>
         )
       })}
